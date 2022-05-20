@@ -32,6 +32,17 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * 抽取了Minio
  *    Minio: com.atguigu.gmall.minio
  *    主类:   com.atguigu.gmall.product
+ *
+ * 未来每个微服务
+ * 1、正常编写业务逻辑，如果有任何业务异常，需要自行throw new GmallException(业务的状态码)
+ *    注意： 200是成功，剩下都是各种错误
+ * 2、全局异常进行捕获处理。前端返回 json 数据。前端根据返回的业务状态码，决定显示的页面效果
+ * 3、系统异常。 RuntimeException，  OOM
+ *    全局异常进行捕获处理：
+ *    OOM: java -jar -XX:+HeapDumpOnOutOfMemoryError xxx.jar
+ *
+ *
+ *
  */
 
 

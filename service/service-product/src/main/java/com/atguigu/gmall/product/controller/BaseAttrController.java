@@ -4,6 +4,8 @@ import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.BaseAttrInfo;
 import com.atguigu.gmall.model.product.BaseAttrValue;
 import com.atguigu.gmall.product.service.BaseAttrInfoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 /**
  * 处理和平台属性有关的请求
  */
+@Api(tags = "平台属性管理")
 @Slf4j
 @RequestMapping("/admin/product")
 @RestController
@@ -27,6 +30,7 @@ public class BaseAttrController {
      *
      * @return
      */
+    @ApiOperation(value = "获取指定分类下所有的平台属性列表")
     @GetMapping("/attrInfoList/{c1Id}/{c2Id}/{c3Id}")
     public Result getAttrInfoList(@PathVariable("c1Id") Long c1Id,
                                   @PathVariable("c2Id") Long c2Id,

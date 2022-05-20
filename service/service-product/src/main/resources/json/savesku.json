@@ -1,0 +1,87 @@
+{
+  "id": null,
+  "spuId": 28,
+  "price": "9999",
+  "skuName": "OPPO Reno8  流云双镜设计航空铝直边金属中框5月23日19：00发布会见,预约赢新机 深蓝 8GB+128GB",
+  "weight": "1",
+  "skuDesc": "地方撒大表达式分段锁",
+  "category3Id": 61,
+  "skuAttrValueList": [
+    {
+      "attrId": "1",
+      "valueId": "6"
+    },
+    {
+      "attrId": "2",
+      "valueId": "8"
+    },
+    {
+      "attrId": "3",
+      "valueId": "19"
+    },
+    {
+      "attrId": "4",
+      "valueId": "27"
+    },
+    {
+      "attrId": "5",
+      "valueId": "34"
+    },
+    {
+      "attrId": "7",
+      "valueId": "52"
+    },
+    {
+      "attrId": "11",
+      "valueId": "72"
+    }
+  ],
+  "skuSaleAttrValueList": [
+    {
+      "saleAttrValueId": "118",
+      "saleAttrValueName": "深蓝",
+      "baseSaleAttrId": "1",
+      "saleAttrName": "选择颜色"
+    },
+    {
+      "saleAttrValueId": "120",
+      "saleAttrValueName": "8+128",
+      "baseSaleAttrId": "2",
+      "saleAttrName": "选择版本"
+    }
+  ],
+  "skuImageList": [
+    {
+      "spuImgId": 279,
+      "imgName": "4.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/e5f534778e79457592f8a3bbe028a08e_4.png",
+      "isDefault": 0
+    },
+    {
+      "spuImgId": 280,
+      "imgName": "5.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/7658f429fe0e4a8ab49828cf62a2c082_5.png",
+      "isDefault": 0
+    },
+    {
+      "spuImgId": 281,
+      "imgName": "3.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/74d2b0d5df6c4aa39c5d451dc8290e05_3.png",
+      "isDefault": 0
+    },
+    {
+      "spuImgId": 282,
+      "imgName": "2.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/8078d53f7c1a4ef8aa63dbab5a376976_2.png",
+      "isDefault": 0
+    },
+    {
+      "spuImgId": 283,
+      "imgName": "1.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/4e5206c8f7de49be8d45c878cd00d3c0_1.png",
+      "isDefault": 1
+    }
+  ],
+  "skuDefaultImg": "http://192.168.200.130:9000/gmall/4e5206c8f7de49be8d45c878cd00d3c0_1.png",
+  "tmId": 5
+}

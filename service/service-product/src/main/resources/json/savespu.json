@@ -1,0 +1,84 @@
+{
+  "id": null,
+  "spuName": "OPPOReno8",
+  "description": "品牌： OPPO\n商品名称：OPPOReno8商品编号：10051809803849店铺： OPPO官方直营旗舰店商品毛重：10.00g机身内存：其他系统：Android",
+  "category3Id": 61,
+  "spuImageList": [
+    {
+      "imgName": "4.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/e5f534778e79457592f8a3bbe028a08e_4.png"
+    },
+    {
+      "imgName": "5.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/7658f429fe0e4a8ab49828cf62a2c082_5.png"
+    },
+    {
+      "imgName": "3.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/74d2b0d5df6c4aa39c5d451dc8290e05_3.png"
+    },
+    {
+      "imgName": "2.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/8078d53f7c1a4ef8aa63dbab5a376976_2.png"
+    },
+    {
+      "imgName": "1.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/4e5206c8f7de49be8d45c878cd00d3c0_1.png"
+    },
+    {
+      "imgName": "2.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/4881cf35e2f543a1b9875c44f7ccf7b6_2.png"
+    },
+    {
+      "imgName": "5.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/da28d7b64d4046cdb8e0f806ae77d4eb_5.png"
+    },
+    {
+      "imgName": "4.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/0a1be44dd03d410cab14bef51a80d187_4.png"
+    },
+    {
+      "imgName": "3.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/022aa533fc6e48889f9e15fcf53a6dd1_3.png"
+    },
+    {
+      "imgName": "1.png",
+      "imgUrl": "http://192.168.200.130:9000/gmall/436f43ee2be84de186dc7b0ff82edce1_1.png"
+    }
+  ],
+  "spuSaleAttrList": [
+    {
+      "baseSaleAttrId": "1",
+      "saleAttrName": "选择颜色",
+      "spuSaleAttrValueList": [
+        {
+          "baseSaleAttrId": "1",
+          "saleAttrValueName": "深蓝"
+        },
+        {
+          "baseSaleAttrId": "1",
+          "saleAttrValueName": "渐变五光"
+        }
+      ]
+    },
+    {
+      "baseSaleAttrId": "2",
+      "saleAttrName": "选择版本",
+      "spuSaleAttrValueList": [
+        {
+          "baseSaleAttrId": "2",
+          "saleAttrValueName": "8+128"
+        },
+        {
+          "baseSaleAttrId": "2",
+          "saleAttrValueName": "8+256"
+        },
+        {
+          "baseSaleAttrId": "2",
+          "saleAttrValueName": "16+256"
+        }
+      ]
+    }
+  ],
+  "tmId": 5
+}
+

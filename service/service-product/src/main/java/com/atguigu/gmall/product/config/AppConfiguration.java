@@ -1,6 +1,8 @@
 package com.atguigu.gmall.product.config;
 
 
+import com.atguigu.gmall.annotation.EnableAppSwaggerApi;
+import com.atguigu.gmall.annotation.EnableAutoHandleException;
 import com.atguigu.gmall.annotation.EnableMinio;
 import com.atguigu.gmall.config.AppMybatisPlusConfiguratoin;
 import com.atguigu.gmall.product.annotation.ProductConfig;
@@ -20,6 +22,8 @@ import org.springframework.context.annotation.Import;
 @MapperScan(basePackages = {"com.atguigu.gmall.product.dao","com.atguigu.gmall.product.mapper"})
 @Import(AppMybatisPlusConfiguratoin.class)
 @EnableMinio
+@EnableAutoHandleException
+@EnableAppSwaggerApi
 @Configuration
 public class AppConfiguration {
 

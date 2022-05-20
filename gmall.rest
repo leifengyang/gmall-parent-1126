@@ -1,0 +1,30 @@
+###商城功能测试
+
+
+### GET request with a header
+GET http://localhost/admin/product/getCategory1
+Accept: application/json
+
+
+### 测试获取一级分类
+GET http://localhost/admin/product/getCategory1
+
+
+### 保存品牌
+POST http://localhost/admin/product/baseTrademark/save
+Accept: application/json
+Content-Type: application/json
+
+{
+  "tmName": "tmName_z10a4",
+  "logoUrl": "logoUrl_33qvb"
+}
+
+
+### 请求测试
+
+
+
+
+
+
