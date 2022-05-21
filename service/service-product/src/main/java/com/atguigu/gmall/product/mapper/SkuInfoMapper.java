@@ -4,6 +4,8 @@ import com.atguigu.gmall.model.product.SkuInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
+
 /**
 * @author lfy
 * @description 针对表【sku_info(库存单元表)】的数据库操作Mapper
@@ -18,6 +20,13 @@ public interface SkuInfoMapper extends BaseMapper<SkuInfo> {
      * @param status
      */
     void updateSkuStatus(@Param("skuId") Long skuId, @Param("status") int status);
+
+    /**
+     * 查询sku价格
+     * @param skuId
+     * @return
+     */
+    BigDecimal getPrice(@Param("skuId") Long skuId);
 }
 
 

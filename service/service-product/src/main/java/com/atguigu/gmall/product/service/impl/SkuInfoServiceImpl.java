@@ -1,9 +1,7 @@
 package com.atguigu.gmall.product.service.impl;
 
-import com.atguigu.gmall.model.product.SkuAttrValue;
-import com.atguigu.gmall.model.product.SkuImage;
-import com.atguigu.gmall.model.product.SkuInfo;
-import com.atguigu.gmall.model.product.SkuSaleAttrValue;
+import com.atguigu.gmall.model.product.*;
+import com.atguigu.gmall.product.mapper.SpuSaleAttrMapper;
 import com.atguigu.gmall.product.service.SkuAttrValueService;
 import com.atguigu.gmall.product.service.SkuImageService;
 import com.atguigu.gmall.product.service.SkuSaleAttrValueService;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -36,6 +35,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
 
     @Autowired
     SkuSaleAttrValueService skuSaleAttrValueService;
+
+    @Autowired
+    SpuSaleAttrMapper spuSaleAttrMapper;
 
     @Transactional
     @Override
@@ -78,6 +80,18 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
 
         //TODO 2、给ES ，保存/删除 数据
 
+    }
+
+    @Override
+    public BigDecimal getSkuPrice(Long skuId) {
+
+        return skuInfoMapper.getPrice(skuId);
+    }
+
+    @Override
+    public List<SpuSaleAttr> getSkudeSpuSaleAttrAndValue(Long skuId) {
+
+        return spuSaleAttrMapper.getSkudeSpuSaleAttrAndValue(skuId);
     }
 }
 

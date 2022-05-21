@@ -41,8 +41,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *    全局异常进行捕获处理：
  *    OOM: java -jar -XX:+HeapDumpOnOutOfMemoryError xxx.jar
  *
- *
- *
  */
 
 
@@ -50,6 +48,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ProductApplication {
 
     public static void main(String[] args) {
+        //TODO 无限极分类如何做
         SpringApplication.run(ProductApplication.class,args);
     }
 }

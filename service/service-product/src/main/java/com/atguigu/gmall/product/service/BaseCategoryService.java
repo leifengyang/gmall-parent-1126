@@ -1,8 +1,11 @@
 package com.atguigu.gmall.product.service;
 
+import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.BaseCategory1;
 import com.atguigu.gmall.model.product.BaseCategory2;
 import com.atguigu.gmall.model.product.BaseCategory3;
+import com.atguigu.gmall.model.product.BaseCategoryView;
+import com.atguigu.gmall.model.to.CategoryAndChildTo;
 
 import java.util.List;
 
@@ -30,4 +33,19 @@ public interface BaseCategoryService {
      * @return
      */
     List<BaseCategory3> getCategory3ByC2id(Long category2Id);
+
+
+    /**
+     * 获取所有分类以及子分类数据
+     * @return
+     */
+    List<CategoryAndChildTo> getAllCategoryWithChilds();
+
+
+    /**
+     * 根据skuId获取分类层级路径
+     * @param skuId
+     * @return
+     */
+    BaseCategoryView getSkuCategoryView(Long skuId);
 }
