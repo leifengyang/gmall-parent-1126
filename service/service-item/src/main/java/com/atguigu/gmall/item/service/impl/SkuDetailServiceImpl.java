@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 public class SkuDetailServiceImpl implements SkuDetailService {
@@ -21,54 +23,75 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
     @Autowired
     ProductFeignClient productFeignClient;
+
+    @Autowired
+    ThreadPoolExecutor corePool;
     //商品详情服务：
     //查询sku详情得做这么多式
-    //1、查分类
-    //2、查Sku信息
-    //3、查sku的图片列表
-    //4、查价格
-    //5、查所有销售属性组合
-    //6、查实际sku组合
+    //1、查分类     1s
+    //2、查Sku信息  200ms
+    //3、查sku的图片列表 1s
+    //4、查价格    30ms
+    //5、查所有销售属性组合  100ms
+    //6、查实际sku组合  500ms
     //7、查介绍(不用管)
     @Override
     public SkuDetailTo getSkuDetail(Long skuId) {
         SkuDetailTo detail = new SkuDetailTo();
-        //1、查分类
-        Result<BaseCategoryView> skuCategoryViewResult = productFeignClient.getSkuCategoryView(skuId);
-        if(skuCategoryViewResult.isOk()){
-            detail.setCategoryView(skuCategoryViewResult.getData());
-        }
+        //异步
+        //编排：编组(管理) +  排列组合（运行）
+        CompletableFuture<Void> categoryTask = CompletableFuture.runAsync(() -> {
+            //1、查分类
+            Result<BaseCategoryView> skuCategoryViewResult = productFeignClient.getSkuCategoryView(skuId);
+            if (skuCategoryViewResult.isOk()) {
+                detail.setCategoryView(skuCategoryViewResult.getData());
+            }
+        }, corePool);
 
 
         //2、查Sku信息 & 3、查sku的图片列表
-        Result<SkuInfo> skuInfoResult = productFeignClient.getSkuInfo(skuId);
-        if(skuInfoResult.isOk()){
-            SkuInfo skuInfo = skuInfoResult.getData();
+        CompletableFuture<Void> skuInfoTask =  CompletableFuture.runAsync(()->{
+            Result<SkuInfo> skuInfoResult = productFeignClient.getSkuInfo(skuId);
+            if(skuInfoResult.isOk()){
+                SkuInfo skuInfo = skuInfoResult.getData();
+                detail.setSkuInfo(skuInfoResult.getData());
+            }
+        },corePool);
 
-            detail.setSkuInfo(skuInfoResult.getData());
-        }
 
 
 
         //4、查价格
-        Result<BigDecimal> skuPriceResult = productFeignClient.getSkuPrice(skuId);
-        if(skuPriceResult.isOk()){
-            detail.setPrice(skuPriceResult.getData());
-        }
+        CompletableFuture<Void> priceTask =  CompletableFuture.runAsync(()->{
+            Result<BigDecimal> skuPriceResult = productFeignClient.getSkuPrice(skuId);
+            if(skuPriceResult.isOk()){
+                detail.setPrice(skuPriceResult.getData());
+            }
+        },corePool);
+
 
 
         //5、查所有销售属性组合
-        Result<List<SpuSaleAttr>> saleAttrAndValue = productFeignClient.getSkudeSpuSaleAttrAndValue(skuId);
-        if(saleAttrAndValue.isOk()){
-            detail.setSpuSaleAttrList(saleAttrAndValue.getData());
-        }
+        CompletableFuture<Void> saleAttrTask = CompletableFuture.runAsync(()->{
+            Result<List<SpuSaleAttr>> saleAttrAndValue = productFeignClient.getSkudeSpuSaleAttrAndValue(skuId);
+            if(saleAttrAndValue.isOk()){
+                detail.setSpuSaleAttrList(saleAttrAndValue.getData());
+            }
+        },corePool);
+
 
         //6、查询ValueJson
-        Result<Map<String, String>> skuValueJson = productFeignClient.getSkuValueJson(skuId);
-        if(skuValueJson.isOk()){
-            Map<String, String> jsonData = skuValueJson.getData();
-            detail.setValuesSkuJson(JSONs.toStr(jsonData));
-        }
+        CompletableFuture<Void> valueJsonTask = CompletableFuture.runAsync(()->{
+            Result<Map<String, String>> skuValueJson = productFeignClient.getSkuValueJson(skuId);
+            if(skuValueJson.isOk()){
+                Map<String, String> jsonData = skuValueJson.getData();
+                detail.setValuesSkuJson(JSONs.toStr(jsonData));
+            }
+        },corePool);
+
+
+        CompletableFuture.allOf(categoryTask,skuInfoTask,priceTask,saleAttrTask,valueJsonTask)
+                .join(); //allOf 返回的 CompletableFuture 总任务结束再往下
 
         return detail;
     }

@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.service.impl;
 
+import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.BaseCategory1;
 import com.atguigu.gmall.model.product.BaseCategory2;
@@ -10,12 +11,16 @@ import com.atguigu.gmall.product.dao.BaseCategory1Dao;
 import com.atguigu.gmall.product.dao.BaseCategory2Dao;
 import com.atguigu.gmall.product.dao.BaseCategory3Dao;
 import com.atguigu.gmall.product.service.BaseCategoryService;
+import com.atguigu.gmall.product.service.CacheService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class BaseCategory1ServiceImpl implements BaseCategoryService {
@@ -28,6 +33,17 @@ public class BaseCategory1ServiceImpl implements BaseCategoryService {
 
     @Autowired
     BaseCategory3Dao baseCategory3Dao;
+
+
+    @Autowired
+    CacheService cacheService;
+
+
+
+    /**
+     * 缓存
+     */
+    Map<String,Object> cache = new ConcurrentHashMap<>();
 
     @Override
     public List<BaseCategory1> getAllCategory1() {
@@ -56,10 +72,29 @@ public class BaseCategory1ServiceImpl implements BaseCategoryService {
         return baseCategory3s;
     }
 
+
+
+
     @Override
     public List<CategoryAndChildTo> getAllCategoryWithChilds() {
+        //1、查询缓存
+        Object cacheData = cacheService.getCacheData(RedisConst.CATEGORY_CACHE_KEY,
+                new TypeReference<List<CategoryAndChildTo>>() {
+        });
 
-        return baseCategory1Dao.getAllCategoryWithChilds();
+
+        if(cacheData == null){
+            //2、缓存没有查询数据库
+            List<CategoryAndChildTo> childs = baseCategory1Dao.getAllCategoryWithChilds();
+            //3、放入缓存
+            cacheService.save(RedisConst.CATEGORY_CACHE_KEY,childs);
+            return childs;
+        }
+
+
+
+        //4、返回缓存数据
+        return (List<CategoryAndChildTo>) cacheData;
     }
 
     @Override

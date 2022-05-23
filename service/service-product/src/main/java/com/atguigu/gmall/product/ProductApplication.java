@@ -41,6 +41,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *    全局异常进行捕获处理：
  *    OOM: java -jar -XX:+HeapDumpOnOutOfMemoryError xxx.jar
  *
+ *
+ * 整合redis
+ * 1、引入redis-starter
+ * 2、配置redis的连接地址等
+ * 3、springboot开启redis的自动配置
+ *      RedisAutoConfiguration：
+ *      1、RedisTemplate<Object, Object>
+ *      2、StringRedisTemplate: RedisTemplate<String, String>  用它存数据，自已定义序列化方式，
  */
 
 

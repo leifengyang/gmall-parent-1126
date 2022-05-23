@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,6 +24,7 @@ public interface ProductFeignClient {
      * 获取系统的所有分类以及子分类
      * @return
      */
+    @ResponseBody
     @GetMapping("/categorys")
     Result<List<CategoryAndChildTo>> getAllCategoryWithChilds();
 
