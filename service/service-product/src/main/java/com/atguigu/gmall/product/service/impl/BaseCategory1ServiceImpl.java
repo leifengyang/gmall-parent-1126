@@ -1,7 +1,6 @@
 package com.atguigu.gmall.product.service.impl;
 
 import com.atguigu.gmall.common.constants.RedisConst;
-import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.BaseCategory1;
 import com.atguigu.gmall.model.product.BaseCategory2;
 import com.atguigu.gmall.model.product.BaseCategory3;
@@ -11,7 +10,7 @@ import com.atguigu.gmall.product.dao.BaseCategory1Dao;
 import com.atguigu.gmall.product.dao.BaseCategory2Dao;
 import com.atguigu.gmall.product.dao.BaseCategory3Dao;
 import com.atguigu.gmall.product.service.BaseCategoryService;
-import com.atguigu.gmall.product.service.CacheService;
+import com.atguigu.gmall.cache.service.CacheService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;

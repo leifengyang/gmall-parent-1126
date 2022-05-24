@@ -1,6 +1,7 @@
 package com.atguigu.gmall.product.config;
 
 
+import com.atguigu.gmall.annotation.EnableAppRedissonAndCache;
 import com.atguigu.gmall.annotation.EnableAppSwaggerApi;
 import com.atguigu.gmall.annotation.EnableAutoHandleException;
 import com.atguigu.gmall.annotation.EnableMinio;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * 当前应用的配置
@@ -24,8 +26,12 @@ import org.springframework.context.annotation.Import;
 @EnableMinio
 @EnableAutoHandleException
 @EnableAppSwaggerApi
+@EnableAppRedissonAndCache  //既能用到缓存组件，还能用到redissonclient
+@EnableScheduling
 @Configuration
 public class AppConfiguration {
+
+
 
 
 

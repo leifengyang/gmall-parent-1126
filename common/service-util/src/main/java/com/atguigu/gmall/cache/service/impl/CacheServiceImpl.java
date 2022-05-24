@@ -1,15 +1,13 @@
-package com.atguigu.gmall.product.service.impl;
+package com.atguigu.gmall.cache.service.impl;
 
+import com.atguigu.gmall.cache.service.CacheService;
 import com.atguigu.gmall.common.util.JSONs;
-import com.atguigu.gmall.model.to.CategoryAndChildTo;
-import com.atguigu.gmall.product.service.CacheService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -80,6 +78,8 @@ public class CacheServiceImpl implements CacheService {
         return null; //只要返回null就调用数据库逻辑
     }
 
+
+    //给缓存中保存数据，要给一个（业务过期+随机过期）时间
     @Override
     public void save(String key, Object data) {
         if(data == null){
@@ -87,7 +87,13 @@ public class CacheServiceImpl implements CacheService {
             redisTemplate.opsForValue().set(key,"no",30, TimeUnit.MINUTES);
         }else {
             //数据库有。 有的数据缓存的久一点
-            redisTemplate.opsForValue().set(key,JSONs.toStr(data),3,TimeUnit.DAYS);
+
+            //为了防止同时过期。给每个过期时间加上随机值
+            // 885493875.9834759833754739583948
+            Double v = Math.random() * 1000000000L;
+            long mill = 1000 * 60 * 60 * 24 *3 + v.intValue();
+
+            redisTemplate.opsForValue().set(key,JSONs.toStr(data),mill,TimeUnit.MILLISECONDS);
         }
 
     }

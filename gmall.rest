@@ -21,7 +21,9 @@ Content-Type: application/json
 }
 
 
-### 请求测试
+### 重建布隆
+GET http://localhost/admin/product/rebuild
+
 
 
 

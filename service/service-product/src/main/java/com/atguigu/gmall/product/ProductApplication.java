@@ -49,6 +49,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *      RedisAutoConfiguration：
  *      1、RedisTemplate<Object, Object>
  *      2、StringRedisTemplate: RedisTemplate<String, String>  用它存数据，自已定义序列化方式，
+ *
+ *
  */
 
 

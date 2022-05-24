@@ -9,7 +9,9 @@ spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
-
+  redis:
+    host: 192.168.200.130
+    password: Lfy123!@!
 
 
 app:

@@ -8,7 +8,9 @@ import com.atguigu.gmall.product.service.SkuSaleAttrValueService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.product.service.SkuInfoService;
 import com.atguigu.gmall.product.mapper.SkuInfoMapper;
+import org.redisson.api.RBloomFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,14 +41,33 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     @Autowired
     SpuSaleAttrMapper spuSaleAttrMapper;
 
+
+    @Qualifier("skuIdBloom")
+    @Autowired
+    RBloomFilter<Object> skuIdBloom;
+
     @Transactional
     @Override
     public void saveSkuInfo(SkuInfo skuInfo) {
         //1、SkuInfo 的基本信息  保存到 sku_info
         skuInfoMapper.insert(skuInfo);
 
+
+
         //sku的自增id
         Long skuId = skuInfo.getId();
+
+        //给布隆保存skuId
+        skuIdBloom.add(skuId);
+
+
+        // 88
+        // 就算删了的，布隆说有，我们查询数据库结果为null，我们也会缓存null值。
+        // 就算布隆误判或者真没，都不担心会跟数据库建立大量连接；
+
+        
+
+
 
         //2、skuImageList sku图片集合； 存到 sku_image表
         List<SkuImage> imageList = skuInfo.getSkuImageList();
@@ -92,6 +113,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     public List<SpuSaleAttr> getSkudeSpuSaleAttrAndValue(Long skuId) {
 
         return spuSaleAttrMapper.getSkudeSpuSaleAttrAndValue(skuId);
+    }
+
+    @Override
+    public List<Long> getAllSkuIds() {
+
+
+        return skuInfoMapper.getSkuIds();
     }
 }
 
