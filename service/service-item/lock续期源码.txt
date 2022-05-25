@@ -1,0 +1,61 @@
+1、lock.lock();
+   1.1、lock(-1(leaseTime), null, false);
+           //锁要绑定线程
+           long threadId = Thread.currentThread().getId();
+
+
+           try {
+               while (true) {
+                   ttl = tryAcquire(-1, leaseTime, unit, threadId);
+                   // lock acquired
+                   if (ttl == null) {
+                       break;
+                   }
+
+                   // waiting for message
+                   if (ttl >= 0) {
+                       try {
+                           future.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);
+                       } catch (InterruptedException e) {
+                           if (interruptibly) {
+                               throw e;
+                           }
+                           future.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);
+                       }
+                   } else {
+                       if (interruptibly) {
+                           future.getNow().getLatch().acquire();
+                       } else {
+                           future.getNow().getLatch().acquireUninterruptibly();
+                       }
+                   }
+               }
+           } finally {
+               unsubscribe(future, threadId);
+           }
+
+    1.2、 tryAcquire(-1, leaseTime, unit, threadId);  怎么抢锁
+            tryAcquireAsync(-1, leaseTime, unit, threadId)；异步抢锁
+            1、用户是否自己指定了锁的过期时间。
+                   指定了：leaseTime 有值
+                   没指定：leaseTime -1
+                1.1)、是-1
+                   internalLockLeaseTime:锁的默认时间，是从配置中拿到的 lockWatchdogTimeout
+                   tryLockInnerAsync(waitTime, internalLockLeaseTime,
+                                        TimeUnit.MILLISECONDS, threadId, RedisCommands.EVAL_LONG);
+
+
+                1.2)、是-1
+
+                    if (leaseTime != -1) {
+                        internalLockLeaseTime = unit.toMillis(leaseTime);
+                    } else {
+                        //是-1会自动续期； watchDog/3 就是“喂狗”时间。重新设置锁的过期时间(设置满)
+                        scheduleExpirationRenewal(threadId);
+                    }
+
+redisson分布式锁特点
+基于lua脚本原子操作+实现所有juc锁功能+自动续期+限时等待....
+
+
+

@@ -1,14 +1,14 @@
-package com.atguigu.gmall.redisson;
+package com.atguigu.gmall.starter.redisson;
 
 
-import com.atguigu.gmall.common.constants.RedisConst;
+
+import com.atguigu.gmall.starter.constant.RedisConst;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.Redisson;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
@@ -44,9 +44,12 @@ public class AppRedissonAutoConfiguration {
         Config config = new Config();
         //Redis url should start with redis:// or rediss:// (for SSL connection)
 
+
+        config.setLockWatchdogTimeout(30*1000);
         config.useSingleServer()
                 .setAddress("redis://"+redisProperties.getHost()+":"+redisProperties.getPort())
-                .setPassword(redisProperties.getPassword());
+                .setPassword(redisProperties.getPassword())
+                ;
 
 
         RedissonClient redisson = Redisson.create(config);

@@ -1,10 +1,11 @@
 package com.atguigu.gmall.item.service.impl;
 
-import com.atguigu.gmall.cache.service.CacheService;
+import com.atguigu.gmall.starter.cache.service.CacheService;
 import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.util.JSONs;
 import com.atguigu.gmall.feign.product.ProductFeignClient;
+import com.atguigu.gmall.starter.cache.aop.annotation.Cache;
 import com.atguigu.gmall.item.service.SkuDetailService;
 import com.atguigu.gmall.model.product.BaseCategoryView;
 import com.atguigu.gmall.model.product.SkuInfo;
@@ -13,6 +14,8 @@ import com.atguigu.gmall.model.to.SkuDetailTo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBloomFilter;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -47,6 +50,95 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     StringRedisTemplate redisTemplate;
 
+    @Autowired
+    RedissonClient redissonClient;
+
+    //cacheKey = "sku:detail:#{args[0]}"   计算后 sku:detail:49
+    //sku:detail:49  // 0~10000
+
+
+    // 使用 bloomName 指定的布隆过滤器判定 bloomValue 是否存在
+    @Cache(cacheKey = RedisConst.SKU_CACHE_KEY_PREFIX+"#{#args[0]}",
+            bloomName = "skuIdBloom",bloomValue="#{#args[0]}")
+    @Override
+    public SkuDetailTo getSkuDetail(Long skuId) {
+        log.info("正在从数据库等确定商品详情：{}",skuId);
+        return getSkuDetailFromDb(skuId);
+    }
+
+    /**
+     * 查询商品详情。使用Redisson提供的分布式锁
+     * @param skuId
+     * @return
+     */
+    public SkuDetailTo getSkuDetailWithRedissonLock(Long skuId) {
+        String cacheKey = RedisConst.SKU_CACHE_KEY_PREFIX + skuId;
+        //1、查询缓存
+        SkuDetailTo cacheData = cacheService.getCacheData(cacheKey,
+                new TypeReference<SkuDetailTo>() {
+                });
+
+        if(cacheData == null){
+            log.info("SkuDetail：{}：缓存未命中，准备回源",skuId);
+            //2、缓存没有准备回源，布隆通过
+            if (skuIdBloom.contains(skuId)){
+                log.info("SkuDetail：{}：布隆过滤通过",skuId);
+                //5、开始查库，加锁防止击穿
+                RLock lock = redissonClient.getLock(RedisConst.SKUDETAIL_LOCK_PREFIX + skuId);
+                //6、加锁
+
+                boolean tryLock = false; //自动解锁+自动续期
+                try {
+                    tryLock = lock.tryLock();
+                    //7、加锁成功
+                    if(tryLock){
+                        log.info("SkuDetail：{}：回源锁加锁成功",skuId);
+                        SkuDetailTo detail = getSkuDetailFromDb(skuId);
+                        //保存到缓存【防null穿透，防雪崩】
+                        cacheService.save(cacheKey,detail);
+
+                        return detail;
+                    }
+                }finally {
+                    try {
+                        if(tryLock) lock.unlock();
+                    }catch (Exception e){
+                        log.error("SkuDetail：又想解别人锁了.... {}",e);
+                    }
+                }
+
+
+                //8、加锁失败。等待1s直接查缓存
+                log.info("SkuDetail：{}：回源锁加锁失败，1s后直接看缓存即可",skuId);
+                try {
+                    Thread.sleep(1000);
+                    cacheData = cacheService.getCacheData(cacheKey,
+                            new TypeReference<SkuDetailTo>() {
+                            });
+                    //返回
+                    return cacheData;
+                } catch (InterruptedException e) {
+                    log.error("SkuDetail：睡眠异常：{}",e);
+                }
+
+            }
+            //3、布隆不通过
+            log.info("SkuDetai：{}：布隆过滤打回",skuId);
+            return null;
+        }
+
+        //4、缓存不为null，直接返回
+        log.info("SkuDetail：{}：缓存命中",skuId);
+        //缓存命中率？越高越好
+        // 1-1: 0
+        // 2-2： 命中/总请求 = 0.5
+        // 3-3:  2/3 = 0.6667
+        // N-N;  (n-1)/n = 0.99999999
+        return cacheData;
+    }
+
+
+
     /**
      * 使用Redis原生的分布式锁。
      * 引入缓存的查询商品详情；
@@ -56,8 +148,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
      * @param skuId
      * @return
      */
-    @Override
-    public SkuDetailTo getSkuDetail(Long skuId) {
+    public SkuDetailTo getSkuDetailWithRedisDistLock(Long skuId) {
         String cacheKey = RedisConst.SKU_CACHE_KEY_PREFIX + skuId;
         //1、查询缓存
         SkuDetailTo cacheData = cacheService.getCacheData(cacheKey,
@@ -95,6 +186,12 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
                         //防止业务卡住，锁自动过期
                         //TODO 1、锁的续期； 自动续期
+//                        Thread thread = new Thread(()->{
+//                            Thread.sleep(3000);
+//                            redisTemplate.expire(RedisConst.LOCK_PREFIX+skuId,10,TimeUnit.SECONDS);
+//                        });
+//                        thread.setDaemon(true);
+
 
                     }finally {
                         //释放锁
@@ -207,6 +304,7 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
         return detail;
     }
+
 
 
 }

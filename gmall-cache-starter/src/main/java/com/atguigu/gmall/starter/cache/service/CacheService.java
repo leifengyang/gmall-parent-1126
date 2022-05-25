@@ -1,9 +1,6 @@
-package com.atguigu.gmall.cache.service;
+package com.atguigu.gmall.starter.cache.service;
 
-import com.atguigu.gmall.model.to.CategoryAndChildTo;
 import com.fasterxml.jackson.core.type.TypeReference;
-
-import java.util.List;
 
 public interface CacheService {
 
