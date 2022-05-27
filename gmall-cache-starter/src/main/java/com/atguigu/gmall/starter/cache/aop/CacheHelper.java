@@ -14,6 +14,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -24,6 +25,9 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
@@ -44,6 +48,13 @@ public class CacheHelper {
     @Autowired
     Map<String,RBloomFilter<Object>> bloomMap;
 
+    @Autowired
+    StringRedisTemplate redisTemplate;
+
+
+    //定时任务线程池
+    ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(5);
+
 
     /**
      * 从缓存中可能会获取到各种值。
@@ -56,6 +67,7 @@ public class CacheHelper {
      * @return
      */
     public Object getCacheData(String cacheKey, ProceedingJoinPoint joinPoint) {
+
         //1、拿到目标方法的返回值类型
         MethodSignature signature = (MethodSignature) joinPoint.getSignature(); //获取目标方法的完整签名
         //2、获取 目标方法
@@ -184,5 +196,25 @@ public class CacheHelper {
         RBloomFilter<Object> bloomFilter = bloomMap.get(bloomName);
 
         return bloomFilter.contains(value);
+    }
+
+
+    public void deleteCache(String key) {
+        //一定做
+        redisTemplate.delete(key);  //90%
+//        Thread.sleep();
+//        redisTemplate.delete(key);
+
+        //立即提交给线程池，不能保证他一定运行
+        threadPool.schedule(()->{
+            redisTemplate.delete(key);
+        },10, TimeUnit.SECONDS); //99%
+
+
+        // save数据有过期时间    100%：保证脏数据不会在系统中永久保存
+
+        //完全实时？自己查库; 1主 N从【读写分离】
+
+
     }
 }

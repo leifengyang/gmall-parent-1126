@@ -14,6 +14,22 @@ public class SkuController {
 
     @Autowired
     SkuInfoService skuInfoService;
+
+    //修改sku数据
+    /**
+     * 1、收请求Controller处理
+     * 2、SkuInfoService.updateSkuInfo(){
+     *     //2.1、改数据库
+     *     //断电
+     *     //2.2、改缓存【改不掉】导致数据不一致
+     *     //1.缓存的每个数据必须有过期时间。万一数据不一致到了过期时间删除后，下一次的查询一定是最新
+     *     //2.数据的不一致时间有点长; 缩短这个时间
+     *
+     *
+     * }
+     */
+
+
     /**
      * 获取sku分页数据列表
      * @return

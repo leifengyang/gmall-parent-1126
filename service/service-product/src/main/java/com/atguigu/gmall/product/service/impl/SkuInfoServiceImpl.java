@@ -5,6 +5,7 @@ import com.atguigu.gmall.product.mapper.SpuSaleAttrMapper;
 import com.atguigu.gmall.product.service.SkuAttrValueService;
 import com.atguigu.gmall.product.service.SkuImageService;
 import com.atguigu.gmall.product.service.SkuSaleAttrValueService;
+import com.atguigu.gmall.starter.cache.aop.CacheHelper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.atguigu.gmall.product.service.SkuInfoService;
 import com.atguigu.gmall.product.mapper.SkuInfoMapper;
@@ -42,6 +43,10 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     SpuSaleAttrMapper spuSaleAttrMapper;
 
 
+    @Autowired
+    CacheHelper cacheHelper;
+
+
     @Qualifier("skuIdBloom")
     @Autowired
     RBloomFilter<Object> skuIdBloom;
@@ -49,6 +54,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
     @Transactional
     @Override
     public void saveSkuInfo(SkuInfo skuInfo) {
+        Long id = skuInfo.getId();
         //1、SkuInfo 的基本信息  保存到 sku_info
         skuInfoMapper.insert(skuInfo);
 
@@ -91,6 +97,9 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         }
         skuSaleAttrValueService.saveBatch(skuSaleAttrValueList);
 
+
+        //删除缓存，很快
+        cacheHelper.deleteCache("sku:detail:47");
 
     }
 
