@@ -1,6 +1,7 @@
 package com.atguigu.gmall.product.mapper;
 
 
+import com.atguigu.gmall.model.list.SearchAttr;
 import com.atguigu.gmall.model.product.BaseAttrInfo;
 import com.atguigu.gmall.model.product.BaseAttrValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -40,6 +41,13 @@ public interface BaseAttrInfoMapper extends BaseMapper<BaseAttrInfo> {
      * @return
      */
     List<BaseAttrValue> findAttrValuesByAttrId(Long attrId);
+
+    /**
+     * 根据skuId查询出对应的所有平台属性名和值，为了检索
+     * @param skuId
+     * @return
+     */
+    List<SearchAttr> getSkuBaseAttrNameAndValue(@Param("skuId") Long skuId);
 }
 
 

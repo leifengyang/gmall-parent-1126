@@ -15,6 +15,7 @@ public class JSONs {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     public static String toStr(Object obj){
         try {
+            //转化字符串的时候，是否null值也带
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             log.error("对象转换JSON的String异常:{}",obj);
@@ -23,6 +24,7 @@ public class JSONs {
     }
 
     public static List<CategoryAndChildTo> strToCategoryObj(String categorys) {
+
         List<CategoryAndChildTo> tos = null;
         try {
             tos = objectMapper.readValue(categorys, new TypeReference<List<CategoryAndChildTo>>() {

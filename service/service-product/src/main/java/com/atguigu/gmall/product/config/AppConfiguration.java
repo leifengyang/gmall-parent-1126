@@ -6,6 +6,7 @@ import com.atguigu.gmall.config.AppMybatisPlusConfiguratoin;
 import com.atguigu.gmall.starter.annotation.EnableAppRedissonAndCache;
 import com.atguigu.gmall.starter.annotation.EnableAutoCache;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -19,13 +20,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableMinio
 @EnableAutoHandleException
 @EnableAppSwaggerApi
-
+@EnableFeignClients(basePackages = "com.atguigu.gmall.feign.list")
 @EnableScheduling
 @Configuration
 public class AppConfiguration {
-
-
-
 
 
 
