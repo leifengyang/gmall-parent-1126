@@ -1,5 +1,6 @@
 package com.atguigu.gmall.item.service.impl;
 
+import com.atguigu.gmall.feign.list.SearchFeignClient;
 import com.atguigu.gmall.starter.cache.service.CacheService;
 import com.atguigu.gmall.common.constants.RedisConst;
 import com.atguigu.gmall.common.result.Result;
@@ -29,6 +30,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
@@ -37,6 +39,9 @@ public class SkuDetailServiceImpl implements SkuDetailService {
 
     @Autowired
     ProductFeignClient productFeignClient;
+
+    @Autowired
+    SearchFeignClient searchFeignClient;
 
     @Autowired
     ThreadPoolExecutor corePool;
@@ -53,6 +58,9 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     @Autowired
     RedissonClient redissonClient;
 
+
+
+
     //cacheKey = "sku:detail:#{args[0]}"   计算后 sku:detail:49
     //sku:detail:49  // 0~10000
 
@@ -64,6 +72,16 @@ public class SkuDetailServiceImpl implements SkuDetailService {
     public SkuDetailTo getSkuDetail(Long skuId) {
         log.info("正在从数据库等确定商品详情：{}",skuId);
         return getSkuDetailFromDb(skuId);
+    }
+
+    @Override
+    public void incrHotScore(Long skuId) {
+        //累积到100人以后增加一次，去redis中热度+1
+        Double score = redisTemplate.opsForZSet().incrementScore(RedisConst.SKU_HOTSCORE, skuId.toString(), 1.0);
+        if(score%100 == 0){
+            //远程调用ES
+            searchFeignClient.updateHotScore(skuId,score.longValue());
+        }
     }
 
     /**

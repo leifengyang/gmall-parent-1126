@@ -1,5 +1,5 @@
 //GET /goods/_search
-//检索、分析(基于查到的结果计算出这些手机涉及到多少品牌、平台属性名和值等)
+//检索、分析(基于查到的结果计算出这些手机涉及到多少品牌、平台属性名和值等)  terms 值分布
 {
   "query": {
     "bool": {
@@ -72,5 +72,55 @@
     }
   ],
   "from": 0,
-  "size": 20
+  "size": 20,
+  "aggs": {
+    "tmIdAgg": {
+      "terms": {
+        "field": "tmId",
+        "size": 100
+      },
+      "aggs": {
+        "tmNameAgg": {
+          "terms": {
+            "field": "tmName",
+            "size": 1
+          }
+        },
+        "tmLogoUrlAgg":{
+          "terms": {
+            "field": "tmLogoUrl",
+            "size": 1
+          }
+        }
+      }
+    },
+    "attrsAgg": {
+      "nested": {
+        "path": "attrs"
+
+      },
+      "aggs": {
+        "attrIdAgg": {
+          "terms": {
+            "field": "attrs.attrId",
+            "size": 100
+          },
+          "aggs": {
+            "attrNameAgg": {
+              "terms": {
+                "field": "attrs.attrName",
+                "size": 1
+              }
+            },
+            "attrValueAgg": {
+              "terms": {
+                "field": "attrs.attrValue",
+                "size": 100
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

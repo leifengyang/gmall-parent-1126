@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 /**
@@ -65,7 +66,8 @@ public class ListController {
      * @return
      */
     @GetMapping("/list.html")
-    public String searchPage(SearchParam param, Model model){
+    public String searchPage(SearchParam param, Model model, HttpServletRequest request){
+        //order不要; category3Id=61&props=23:4G:运行内存&props=106:安卓手机:手机一级&order=xx
 
         //TODO 远程调用检索服务去检索
         Result<GoodsSearchResultVo> searchGoods = searchFeignClient.searchGoods(param);

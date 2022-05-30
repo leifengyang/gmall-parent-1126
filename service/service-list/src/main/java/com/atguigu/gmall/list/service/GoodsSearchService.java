@@ -18,4 +18,6 @@ public interface GoodsSearchService {
      * @return
      */
     GoodsSearchResultVo search(SearchParam param);
+
+    void updateHotScore(Long skuId, Long score);
 }

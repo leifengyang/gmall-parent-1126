@@ -12,4 +12,5 @@ public class RedisConst {
     public static final String BLOOM_SKU_ID = "bloom:skuid";  // "bloom:order"
 
     public static final String SALE_ATTR_CACHE_KEY = "sale:attr:";
+    public static final String SKU_HOTSCORE = "sku:hotscore";
 }
