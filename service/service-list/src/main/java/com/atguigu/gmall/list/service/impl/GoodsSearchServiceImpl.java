@@ -297,6 +297,12 @@ public class GoodsSearchServiceImpl implements GoodsSearchService {
         for (SearchHit<Goods> hit : hits) {
             //获取命中记录的商品真正数据
             Goods item = hit.getContent(); // hits中每个记录的 _source 部分
+
+            //如果是模糊检索  需要用高亮的标题来替换原标题
+            if(!StringUtils.isEmpty(param.getKeyword())){
+                String title = hit.getHighlightField("title").get(0);
+                item.setTitle(title);
+            }
             goods.add(item);
         }
         resultVo.setGoodsList(goods);

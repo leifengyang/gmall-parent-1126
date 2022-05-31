@@ -45,4 +45,9 @@ public class UserInfo extends BaseEntity {
     @TableField("user_level")
     private String userLevel;
 
+
+    //数据库无此字段
+    @TableField(exist = false)
+    private String ipAddr;
+
 }
