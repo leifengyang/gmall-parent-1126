@@ -22,7 +22,7 @@ public class IndexController {
     @Autowired
     ProductFeignClient productFeignClient;
 
-    @GetMapping("/")
+    @GetMapping({"/","/index.html"})
     public String indexPage(Model model){
         //classpath:/templates/ + index + .html
         //classpath:/templates/index.html

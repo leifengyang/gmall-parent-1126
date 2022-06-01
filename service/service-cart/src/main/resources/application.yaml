@@ -1,18 +1,10 @@
 server:
-  port: 8000
+  port: 12000
+
 spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    enabled: true
-
-
-
-
-
-
-
-
+  redis:
+    host: 192.168.200.130
+    password: Lfy123!@!
 

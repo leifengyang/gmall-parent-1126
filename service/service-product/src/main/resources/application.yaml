@@ -12,6 +12,7 @@ spring:
 #    username: root
 #    password: root
 #    driver-class-name: com.mysql.jdbc.Driver
+#    core-size: 4
 
 
   redis:

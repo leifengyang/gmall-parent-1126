@@ -5,11 +5,15 @@ import com.atguigu.gmall.annotation.*;
 import com.atguigu.gmall.config.AppMybatisPlusConfiguratoin;
 import com.atguigu.gmall.starter.annotation.EnableAppRedissonAndCache;
 import com.atguigu.gmall.starter.annotation.EnableAutoCache;
+import com.zaxxer.hikari.HikariDataSource;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import javax.sql.DataSource;
 
 /**
  * 当前应用的配置
@@ -24,7 +28,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @Configuration
 public class AppConfiguration {
-
 
 
 
