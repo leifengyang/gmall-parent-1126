@@ -39,6 +39,11 @@ public class UserController {
             //没有登录成功
             return Result.build("", ResultCodeEnum.LOGIN_ERROR);
         }
+
+        //TODO 登录成功以后。  以MQ的方式进行异步解耦，登录后的操作
+        //sendMsg;// 1ms
+        //其他微服务可以监听这个消息，做后续处理。
+
         return Result.ok(responseVo);
     }
 

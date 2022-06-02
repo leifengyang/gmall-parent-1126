@@ -88,6 +88,7 @@ public class AppThreadPoolAutoConfiguration {
             Thread thread = new Thread(r);
             // [service-product]-core-1
             thread.setName(appName + count.getAndIncrement());
+//            thread.setPriority();
             return thread;
         }
     }

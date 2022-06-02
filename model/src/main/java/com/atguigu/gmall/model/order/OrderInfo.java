@@ -22,7 +22,9 @@ import java.util.Map;
 
 @Data
 @ApiModel(description = "订单信息")
-@TableName("order_info")
+@TableName("order_info") //这个表数据库没有此表名。 逻辑表 order_info
+// select * from order_info  以前没分表的时候，改怎么写还怎么？由sharding自动决定去操作哪个表
+//
 public class OrderInfo extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

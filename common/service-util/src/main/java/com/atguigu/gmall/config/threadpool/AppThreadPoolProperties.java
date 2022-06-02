@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 @ConfigurationProperties(prefix = "app.threadpool")
 public class AppThreadPoolProperties {
 
-    private Integer corePoolSize;
-    private Integer maximumPoolSize;
-    private Long keepAliveTime; //以分钟为单位
+    private Integer corePoolSize = 4;
+    private Integer maximumPoolSize = 4;
+    private Long keepAliveTime = 5L; //以分钟为单位
     private TimeUnit unit = TimeUnit.MINUTES;
     private Integer queueSize = 1000;
 

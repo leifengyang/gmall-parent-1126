@@ -34,9 +34,16 @@ public class CartRpcController {
 
 
         //1、得知道这个用户登录了没？登录了用用户id，没登录用临时键
-
         CartItem cartItem = cartService.addSkuToCart(skuId,skuNum);
 
+
         return Result.ok(cartItem);
+    }
+
+    @GetMapping("/delete/checked")
+    public Result deleteCartChecked(){
+        cartService.deleteChecked();
+
+        return Result.ok();
     }
 }

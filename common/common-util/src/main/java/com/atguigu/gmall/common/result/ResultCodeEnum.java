@@ -30,6 +30,9 @@ public enum ResultCodeEnum {
     SECKILL_ORDER_SUCCESS(218, "下单成功"),
     COUPON_GET(220, "优惠券已经领取"),
     COUPON_LIMIT_GET(221, "优惠券已发放完毕"),
+
+    CART_OVERFLOW(300,"购物车数量溢出"),
+    CART_MERGE_OVERFLOW(301,"购物车合并数量超出限制，请移除部分商品"),
     ;
 
     private Integer code;

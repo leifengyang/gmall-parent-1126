@@ -62,4 +62,19 @@ public class CartController {
 
         return "cart/addCart"; //商品添加成功提示页
     }
+
+    /**
+     * 删除购物车中选中的所有商品
+     * @return
+     */
+    @GetMapping("/cart/deleteChecked")
+    public String deleteChecked(){
+        cartFeignClient.deleteCartChecked();
+        return "cart/index";
+    }
+
+
+    //自己设计一个我的收藏;可以允许收藏商品信息等
+    // /cart/collectChecked
+
 }
