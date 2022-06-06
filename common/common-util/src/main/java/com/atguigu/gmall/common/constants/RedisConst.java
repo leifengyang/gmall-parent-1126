@@ -19,4 +19,6 @@ public class RedisConst {
     public static final String CART_KEY_PREFIX = "user:cart:";
     public static final Duration TEMP_CART_TIMEOUT = Duration.ofDays(90); //3个月
     public static final Long CART_SIZE_LIMIT = 200L;
+
+    public static final String NO_REPEAT_TOKEN = "norepeat:token:";
 }

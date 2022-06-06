@@ -1,0 +1,23 @@
+{
+  "consignee": "atguigu666",
+  "consigneeTel": "13833456789",
+  "deliveryAddress": "北京市大兴区",
+  "paymentWay": "ONLINE",
+  "orderComment": "",
+  "orderDetailList": [
+    {
+      "imgUrl": "http://192.168.200.130:9000/gmall/5.png",
+      "skuName": "小米 CC9 PLUS 手机 美颜自拍 游戏手机 仙女渐变色(美图定制版) 4G全网通 6GB+128GB",
+      "orderPrice": 2200,
+      "skuNum": 3,
+      "stock": "0"
+    },
+    {
+      "imgUrl": "http://192.168.200.130:9000/gmall/022aa533fc6e48889f9e15fcf53a6dd1_3.png",
+      "skuName": " OPPO Reno8  流云双镜设计航空铝直边金属中框5月23日19：00发布会见,预约赢新机 渐变五光 8GB+128GB",
+      "orderPrice": 9999,
+      "skuNum": 1,
+      "stock": "1"
+    }
+  ]
+}

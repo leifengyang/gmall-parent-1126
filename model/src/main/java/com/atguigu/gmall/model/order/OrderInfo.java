@@ -61,7 +61,7 @@ public class OrderInfo extends BaseEntity {
     private String orderComment;
 
     @ApiModelProperty(value = "订单交易编号（第三方支付用)")
-    @TableField("out_trade_no")
+    @TableField("out_trade_no") //
     private String outTradeNo;
 
     @ApiModelProperty(value = "订单描述(第三方支付用)")

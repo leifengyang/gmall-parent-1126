@@ -1,6 +1,7 @@
 package com.atguigu.gmall.web;
 
 
+import com.atguigu.gmall.annotation.EnableFeignAuthHeaderInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -23,6 +24,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * 3、编写页面渲染逻辑，${}取值遍历等操作
  *
  */
+
 @SpringCloudApplication
 public class WebAllApplication {
 

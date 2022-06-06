@@ -1,6 +1,7 @@
 package com.atguigu.gmall.web.config;
 
 
+import com.atguigu.gmall.annotation.EnableFeignAuthHeaderInterceptor;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +14,15 @@ import org.springframework.context.annotation.Configuration;
  *   客户端所在包： com.atguigu.gmall.web.feign
  *
  */
-@EnableFeignClients(basePackages = "com.atguigu.gmall.feign")
+@EnableFeignAuthHeaderInterceptor
+@EnableFeignClients(basePackages = {
+        "com.atguigu.gmall.feign.cart",
+        "com.atguigu.gmall.feign.item",
+        "com.atguigu.gmall.feign.list",
+        "com.atguigu.gmall.feign.order",
+        "com.atguigu.gmall.feign.product",
+        "com.atguigu.gmall.feign.user"
+})
 @Configuration
 public class AppFeignConfig {
 }

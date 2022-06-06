@@ -216,7 +216,6 @@ public class CartServiceImpl implements CartService {
         BoundHashOperations<String, String, String> userCart = getUserCart();  //190
         BoundHashOperations<String, String, String> tempCart = getTempCart();  //190
 
-
         //1、判断是否需要合并购物车（UserId，UserTempId）
         if (userCart != null && tempCart != null && tempCart.size() > 0) {
             //直接判断，超出就不用合并，返回错误
@@ -393,6 +392,19 @@ public class CartServiceImpl implements CartService {
 
 
 
+    }
+
+    @Override
+    public List<CartItem> getCheckList() {
+        //1、获取购物车所有商品
+        List<CartItem> cartItems = getCartItems();
+
+        //2、过滤选中的
+        List<CartItem> items = cartItems.stream()
+                .filter(cartItem -> cartItem.getIsChecked() == 1)
+                .collect(Collectors.toList());
+
+        return items;
     }
 
     private void deleteItem(String cartKey, Object[] skuIds) {

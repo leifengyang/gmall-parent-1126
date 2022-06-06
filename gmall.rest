@@ -26,6 +26,12 @@ GET http://localhost/admin/product/rebuild
 
 
 
+### 测试数据校验  http:400 参数异常
+GET http://localhost:13000/api/order/haha?name=aa&age=-20&email=aaa
+
+
+
+
 
 
 

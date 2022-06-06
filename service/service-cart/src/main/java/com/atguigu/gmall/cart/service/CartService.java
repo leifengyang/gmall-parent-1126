@@ -91,4 +91,10 @@ public interface CartService {
      */
     void validateCartOverflow(String cartKey);
 
+    /**
+     * 获取所有选中的商品列表
+     * @return
+     */
+    List<CartItem> getCheckList();
+
 }

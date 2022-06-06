@@ -36,6 +36,7 @@ public class BaseAttrController {
                                   @PathVariable("c2Id") Long c2Id,
                                   @PathVariable("c3Id") Long c3Id) {
 
+        //JSR303：
         //自注释
         List<BaseAttrInfo> baseAttrInfos = baseAttrInfoService.findAttrInfoAndAttrValueByCategoryId(c1Id, c2Id, c3Id);
 
