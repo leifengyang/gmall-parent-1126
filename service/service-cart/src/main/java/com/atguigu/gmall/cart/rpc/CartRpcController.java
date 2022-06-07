@@ -6,6 +6,7 @@ import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.common.util.AuthUtil;
 import com.atguigu.gmall.model.cart.CartItem;
 import com.atguigu.gmall.model.to.UserAuthTo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
@@ -15,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/rpc/inner/cart")
 public class CartRpcController {
@@ -41,8 +43,13 @@ public class CartRpcController {
         return Result.ok(cartItem);
     }
 
+    /**
+     * 删除选中的商品
+     * @return
+     */
     @GetMapping("/delete/checked")
     public Result deleteCartChecked(){
+        log.info("deleteCartChecked");
         cartService.deleteChecked();
 
         return Result.ok();

@@ -27,6 +27,8 @@ public class OrderRestController {
     @Autowired
     OrderService orderService;
 
+
+
     /**
      * 订单提交
      * @param tradeNo
@@ -41,8 +43,9 @@ public class OrderRestController {
         // 提交订单
         Long orderId = orderService.submitOrder(tradeNo, orderSubmitVo);
 
-        //TODO 删除购物车中选中的商品
-        return Result.ok(orderId);
+
+        //前端不能接到 Long 的数据，需要转成字符串
+        return Result.ok(orderId.toString());
     }
 
 

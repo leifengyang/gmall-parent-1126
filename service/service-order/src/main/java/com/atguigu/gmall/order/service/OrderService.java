@@ -32,4 +32,10 @@ public interface OrderService {
      * @param orderSubmitVo
      */
     Long saveOrder(OrderSubmitVo orderSubmitVo);
+
+    /**
+     * 订单创建完成后，发送消息
+     * @param orderId
+     */
+    void sendOrderCreateMsg(Long orderId);
 }

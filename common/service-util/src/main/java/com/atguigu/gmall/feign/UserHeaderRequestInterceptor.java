@@ -20,17 +20,20 @@ public class UserHeaderRequestInterceptor implements RequestInterceptor {
         //1、得到当前请求（请求刚进来Tomcat接到的这个老请求）
 
         ServletRequestAttributes request = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if(request!=null){
+            String userId = request.getRequest().getHeader("UserId");
+            if(userId != null){
+                template.header("UserId",userId);
+            }
 
-        String userId = request.getRequest().getHeader("UserId");
-        if(userId != null){
-            template.header("UserId",userId);
+
+            String UserTempId = request.getRequest().getHeader("UserTempId");
+            if(UserTempId != null){
+                template.header("UserTempId",UserTempId);
+            }
         }
 
 
-        String UserTempId = request.getRequest().getHeader("UserTempId");
-        if(UserTempId != null){
-            template.header("UserTempId",UserTempId);
-        }
 
 
 
