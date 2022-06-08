@@ -3,6 +3,7 @@ package com.atguigu.gmall.order.service.impl;
 import com.atguigu.gmall.common.constants.MqConst;
 import com.atguigu.gmall.common.util.AuthUtil;
 import com.atguigu.gmall.common.util.JSONs;
+import com.atguigu.gmall.feign.pay.PayFeignClient;
 import com.atguigu.gmall.model.enums.OrderStatus;
 import com.atguigu.gmall.model.enums.PaymentWay;
 import com.atguigu.gmall.model.enums.ProcessStatus;
@@ -11,6 +12,10 @@ import com.atguigu.gmall.model.order.OrderDetail;
 import com.atguigu.gmall.model.to.UserAuthTo;
 import com.atguigu.gmall.order.service.OrderDetailService;
 import com.atguigu.gmall.order.service.OrderInfoService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.google.common.collect.Lists;
 
 import java.util.Date;
@@ -35,6 +40,7 @@ import com.atguigu.gmall.order.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -83,13 +89,14 @@ public class OrderServiceImpl implements OrderService {
     OrderDetailService orderDetailService;
 
     @Autowired
+    PayFeignClient payFeignClient;
+
+    @Autowired
     RabbitTemplate rabbitTemplate;
 
 
     @Autowired
     ThreadPoolExecutor corePool; //@Primary
-
-
 
 
     @Override
@@ -173,7 +180,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-
     @Override
     public Long submitOrder(String tradeNo, OrderSubmitVo orderSubmitVo) {
         //1、验令牌
@@ -232,7 +238,7 @@ public class OrderServiceImpl implements OrderService {
         //获取到老请求
         RequestAttributes oldReq = RequestContextHolder.getRequestAttributes();
         //5、删除购物车中选中商品。长事务。
-        corePool.submit(()->{
+        corePool.submit(() -> {
             //再给当前线程一放
             RequestContextHolder.setRequestAttributes(oldReq);
             log.info("正在准备删除购物车中选中的商品：");
@@ -250,7 +256,6 @@ public class OrderServiceImpl implements OrderService {
         // 把他放到保存订单的事务环节了。
         //缺点：
         //  1)、MQ稳定性差会导致经常下单失败。
-
 
 
         return orderId;
@@ -285,7 +290,60 @@ public class OrderServiceImpl implements OrderService {
         String json = JSONs.toStr(orderCreateTo);
 
         rabbitTemplate.convertAndSend(MqConst.ORDER_EVENT_EXCHANGE,
-                MqConst.RK_ORDER_CREATE,json);
+                MqConst.RK_ORDER_CREATE, json);
+
+    }
+
+
+    @Override
+    public OrderInfo getOrderInfoIdAndAmount(Long orderId) {
+        Long userId = AuthUtil.getUserAuth().getUserId();
+        //select * from wh
+        LambdaQueryWrapper<OrderInfo> wrapper =
+                Wrappers.lambdaQuery(OrderInfo.class)
+                        .eq(OrderInfo::getId, orderId)
+                        .eq(OrderInfo::getUserId, userId);
+
+        OrderInfo one = orderInfoService.getOne(wrapper);
+        return one;
+    }
+
+
+    @Override
+    public void updateOrderStatusToPAID(String outTradeNo) {
+        //1、查出订单  outTradeNo  GMALL-1654649165168-3-9dc10
+        long userId = Long.parseLong(outTradeNo.split("-")[2]);
+
+        //2、修改
+        ProcessStatus paid = ProcessStatus.PAID;
+        orderInfoService.updateOrderStatusToPaid(outTradeNo, userId, paid.name(), paid.getOrderStatus().name());
+    }
+
+
+    @Override
+    public void checkAndSyncOrderStatus(String outTradeNo) {
+        //1、数据库查出此单
+        long userId = Long.parseLong(outTradeNo.split("-")[2]);
+        LambdaQueryWrapper<OrderInfo> wrapper = Wrappers.lambdaQuery(OrderInfo.class)
+                .eq(OrderInfo::getUserId, userId)
+                .eq(OrderInfo::getOutTradeNo, outTradeNo);
+        OrderInfo orderInfo = orderInfoService.getOne(wrapper);
+
+
+
+
+        //2、支付宝查出此单 payFeignClient
+        Result<String> result = payFeignClient.queryTrade(outTradeNo);
+        /**
+         * TRADE_FINISHED
+         * TRADE_SUCCESS  支付成功
+         * WAIT_BUYER_PAY
+         * TRADE_CLOSED
+         */
+        if("TRADE_SUCCESS".equals(result.getData()) && (orderInfo.getOrderStatus().equals(OrderStatus.UNPAID.name()) || orderInfo.getOrderStatus().equals(OrderStatus.CLOSED.name()))){
+            //改成已支付即可
+            updateOrderStatusToPAID(outTradeNo);
+        }
 
     }
 

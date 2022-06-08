@@ -30,7 +30,8 @@ GET http://localhost/admin/product/rebuild
 GET http://localhost:13000/api/order/haha?name=aa&age=-20&email=aaa
 
 
-
+###
+POST http://2yv3x6up8z.51xd.pub/api/payment/notify/success
 
 
 

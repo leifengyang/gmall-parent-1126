@@ -16,6 +16,11 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
 
     void updateOrderStatus(@Param("originStatus") String originStatus,
                            @Param("orderInfo") OrderInfo orderInfo);
+
+    void updateOrderStatusToPaid(@Param("outTradeNo") String outTradeNo,
+                                 @Param("userId") Long userId,
+                                 @Param("processStatus") String processStatus,
+                                 @Param("orderStatus") String orderStatus);
 }
 
 

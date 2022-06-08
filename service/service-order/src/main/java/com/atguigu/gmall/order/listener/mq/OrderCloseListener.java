@@ -54,6 +54,7 @@ public class OrderCloseListener {
             //cas(期望、修改)
             //具有幂等性。
             orderInfoService.updateOrderStatus(ProcessStatus.UNPAID,ProcessStatus.CLOSED,orderId,userId);
+
             log.info("订单已处理：{}",create);
         }catch (Exception e){
             log.error("订单关闭发送错误。错误：{}，订单信息：{}",e,create);

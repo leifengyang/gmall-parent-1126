@@ -23,6 +23,11 @@ public class DateUtil {
         return (date1.getTime() - date2.getTime()) / 1000;
     }
 
+    public static String formatDate(Date date,String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(date);
+
+    }
     /**
      * 格式化日期
      *

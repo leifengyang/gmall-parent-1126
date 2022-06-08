@@ -20,4 +20,13 @@ public interface OrderInfoService extends IService<OrderInfo> {
      * @param userId   用户id
      */
     void updateOrderStatus(ProcessStatus originStatus, ProcessStatus modifyStatus, Long orderId, Long userId);
+
+    /**
+     * 修改订单为已支付
+     * @param outTradeNo
+     * @param userId
+     * @param processStatus
+     * @param orderStatus
+     */
+    void updateOrderStatusToPaid(String outTradeNo, long userId, String processStatus, String orderStatus);
 }

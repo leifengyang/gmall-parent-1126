@@ -34,6 +34,11 @@ public class OrderInfo1ServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInf
 
         orderInfoMapper.updateOrderStatus(originStatus.name(),orderInfo);
     }
+
+    @Override
+    public void updateOrderStatusToPaid(String outTradeNo, long userId, String processStatus, String orderStatus) {
+        orderInfoMapper.updateOrderStatusToPaid(outTradeNo,userId,processStatus,orderStatus);
+    }
 }
 
 
