@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient("service-pay")
 public interface PayFeignClient {
     /**
-     * 查询某次交易详情
+     * 查询某次交易状态详情
      * @param outTradeNo
      * @return
      */
