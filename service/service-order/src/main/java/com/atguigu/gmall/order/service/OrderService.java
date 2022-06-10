@@ -1,8 +1,12 @@
 package com.atguigu.gmall.order.service;
 
+import com.atguigu.gmall.model.mqto.ware.WareOrderTo;
 import com.atguigu.gmall.model.order.OrderInfo;
 import com.atguigu.gmall.model.vo.order.OrderConfirmVo;
+import com.atguigu.gmall.model.vo.order.OrderSpiltVo;
 import com.atguigu.gmall.model.vo.order.OrderSubmitVo;
+
+import java.util.List;
 
 public interface OrderService {
 
@@ -54,4 +58,11 @@ public interface OrderService {
      * @param outTradeNo
      */
     void checkAndSyncOrderStatus(String outTradeNo);
+
+    /**
+     * 订单服务按照 库存提供的 spilt组合信息，拆出子订单，返回给库存系统
+     * @param spiltVo
+     * @return
+     */
+    List<WareOrderTo> orderSpilt(OrderSpiltVo spiltVo);
 }

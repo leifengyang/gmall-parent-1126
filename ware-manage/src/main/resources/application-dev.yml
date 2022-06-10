@@ -21,12 +21,12 @@ spring:
     port: 5672
     username: admin
     password: admin
-    publisher-confirms: true
     publisher-returns: true
     listener:
       simple:
-        cknowledge-mode: manual
+        acknowledge-mode: manual
         prefetch: 1 # 消费者每次从队列获取的消息数量。此属性当不设置时为：轮询分发，设置为1为：公平分发
+    publisher-confirm-type: correlated
   redis:
     host: 192.168.200.130
     port: 6379
@@ -57,6 +57,8 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
+
+#库存系统会把拆单后的所有数据发给订单服务，订单服务把拆后的订单自己保存等就行
 order:
   split:
-    url: http://localhost:8204/api/order/orderSplit
+    url: http://api.gmall.com/api/order/orderSplit

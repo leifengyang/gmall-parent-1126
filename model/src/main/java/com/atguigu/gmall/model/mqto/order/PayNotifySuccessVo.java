@@ -1,4 +1,4 @@
-package com.atguigu.gmall.pay.vo;
+package com.atguigu.gmall.model.mqto.order;
 
 import lombok.Data;
 

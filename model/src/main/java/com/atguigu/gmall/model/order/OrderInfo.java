@@ -130,6 +130,10 @@ public class OrderInfo extends BaseEntity {
     @TableField("operate_time")
     private Date operateTime;
 
+    //查出出当前订单的所有订单项
+    @TableField(exist = false)
+    private List<OrderDetail> details;
+
     //  计算活动或者优惠劵的金额
     @TableField(exist = false)
     private List<OrderDetailVo> orderDetailVoList;

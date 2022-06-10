@@ -50,12 +50,13 @@ spring:
           uri: lb://service-pay
           predicates:
             - Path=/api/payment/**
+            - Host=**.gmall.com,2yv3x6up8z.51xd.pub
 
 
         - id: web_all_route
           uri: lb://web-all
           predicates:
-            - Host=**.gmall.com,gmall.com
+            - Host=**.gmall.com,gmall.com,
 
 
 app:
