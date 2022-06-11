@@ -17,4 +17,7 @@ public class MqConst {
     public static final String WARE_STOCK_RESULT_QUEUE = "queue.ware.order";
     public static final String ROUTING_WARE_ORDER = "ware.order";
 
+    public static final String SECKILL_EVENT_EXCHANGE = "seckill-event-exchange";
+    public static final String RK_SECKILL_QUEUE = "seckill.queued";
+    public static final String SECKILL_SUCCESS_QUEUE = "seckill-success-queue";
 }

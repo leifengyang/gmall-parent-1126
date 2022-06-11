@@ -24,6 +24,8 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -143,6 +145,9 @@ public class CacheHelper {
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setVariable("args", joinPoint.getArgs());
         context.setVariable("nowTime",System.currentTimeMillis());
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        context.setVariable("currentDate",format.format(new Date()));
         //未来各种东西自己放
 
 
